@@ -13,19 +13,36 @@ steps:
       from_secret: u_docker
     password: 
       from_secret: p_docker
-    repo: neounlimited/dronething
+    repo: luisredda/drone-harness-plugin
     auto_tag: true
 - name: harness-deploy
-  image: luisredda/drone-simple-plugin
+  image: luisredda/drone-harness-plugin
   settings:  
-    application: "ECommerce"
-    pipeline: "Deploy to K8s"
-    service: "${DRONE_REPO_NAME}"
-    build: "${DRONE_TAG}"
+    application: "Harness Demo Application"
+    type: "PIPELINE"
+    entityname: "CD Pipeline"
+    service: "search"
+    build: "v6"
     accountid:
       from_secret: harness_acctid
     apikey: 
       from_secret: harness_secret
     body: |
-      any other payload here
-
+     variableInputs: [ 
+      {
+        name: "Service"
+        variableValue: {
+          type: NAME
+          value: "order-service"
+        }
+      }
+      ], 
+      serviceInputs: [ {
+        name: "order-service", 
+        artifactValueInput: {
+          valueType: BUILD_NUMBER
+          buildNumber: {
+            buildNumber: "1"
+      artifactSourceName: "harness_todolist-sample"
+          }
+        }}  ]
